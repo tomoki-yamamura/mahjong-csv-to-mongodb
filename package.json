@@ -1,5 +1,30 @@
 {
+  "name": "mahjong-csv-to-mongodb",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --exec npx ts-node ./src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tomoki-yamamura/mahjong-csv-to-mongodb.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tomoki-yamamura/mahjong-csv-to-mongodb/issues"
+  },
+  "homepage": "https://github.com/tomoki-yamamura/mahjong-csv-to-mongodb#readme",
+  "description": "",
   "devDependencies": {
+    "nodemon": "^3.1.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "mongodb": "^6.6.1",
+    "mongoose": "^8.3.5"
   }
 }
