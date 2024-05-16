@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-export interface Score extends Document {
+export interface Score {
   playerId: mongoose.Types.ObjectId;
   point: number;
 }

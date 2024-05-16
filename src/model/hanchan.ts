@@ -3,7 +3,7 @@ import { Score } from "./score";
 
 type mode = "3player" | "4player";
 
-interface Hanchan extends Document {
+export interface Hanchan {
   date: Date;
   mode: mode;
   scores: Score[];
