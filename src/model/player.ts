@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import mongoose, { Model, Schema } from "mongoose";
 export interface Player {
   name: string
 }
@@ -10,4 +10,4 @@ const playerSchema = new Schema<Player>({
   }
 })
 
-export const PlayerModel = model<Player>('Player', playerSchema)
+export const PlayerModel: Model<Player> = mongoose.model<Player>('Player', playerSchema)
