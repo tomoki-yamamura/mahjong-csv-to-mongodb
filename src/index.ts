@@ -6,13 +6,17 @@ import { Hanchan, HanchanModel } from "./model/hanchan";
 import parseDateString from "./utils/parseDate";
 import { Score } from "./model/score";
 import { GoogleSpreadsheetFactory } from "./factory/doc";
-import { PLAYERS_3_SHEETID, getRowObjectFromSheet } from "./google/sheet";
+import * as constants from "./google/constants"
+import { getPlayersNameFromSheet, getRowObjectFromSheet } from "./google/sheet";
 const uri = process.env.MONGO_URI as string;
 
-(() => {
+(async () => {
   const factory = new GoogleSpreadsheetFactory
-  const doc = factory.createGoogleSheetDoc()
-  getRowObjectFromSheet(doc, PLAYERS_3_SHEETID)
+  const doc = await factory.createGoogleSheetDoc()
+  const playersName = await getPlayersNameFromSheet(doc, constants.PLAYERS_NAME_SHEETID)
+  // const result = await getRowObjectFromSheet(doc, PLAYERS_3_SHEETID)
+  // console.log(result);
+  
 })()
 
 // async function run() {

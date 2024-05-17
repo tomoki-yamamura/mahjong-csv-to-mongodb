@@ -17,7 +17,9 @@ const serviceAccountAuth = new JWT({
 
 export class GoogleSpreadsheetFactory {
   constructor() {}
-  createGoogleSheetDoc(): GoogleSpreadsheet {
-    return new GoogleSpreadsheet(sheetId, serviceAccountAuth)
+  async createGoogleSheetDoc(): Promise<GoogleSpreadsheet> {
+    const doc = new GoogleSpreadsheet(sheetId, serviceAccountAuth)
+    await doc.loadInfo()
+    return doc
   }
 }
