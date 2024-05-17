@@ -7,18 +7,21 @@ import parseDateString from "./utils/parseDate";
 import { Score } from "./model/score";
 import { GoogleSpreadsheetFactory } from "./factory/doc";
 import * as constants from "./google/constants"
-import { getPlayersNameFromSheet, getRowObjectFromSheet } from "./google/sheet";
+import { getPlayersNameFromSheet, getScoresObjectFromSheet,  } from "./google/sheet";
 import { insertPlayers } from "./model/query/player";
+import { insertHanchans } from "./model/query/hanchan";
 const uri = process.env.MONGO_URI as string;
 
 (async () => {
   const factory = new GoogleSpreadsheetFactory
   const doc = await factory.createGoogleSheetDoc()
+  const score3plyers = await getScoresObjectFromSheet(doc, constants.PLAYERS_3_SHEETID);
   const playersName = await getPlayersNameFromSheet(doc, constants.PLAYERS_NAME_SHEETID)
   try {
     await mongoose.connect(uri);
-    await insertPlayers(playersName)
-
+    // await insertPlayers(playersName)
+    await insertHanchans(score3plyers)
+    
   } catch(error) {
     console.error(error);
   } finally {

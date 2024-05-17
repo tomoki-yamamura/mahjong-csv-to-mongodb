@@ -1,14 +1,14 @@
 import { GoogleSpreadsheet } from "google-spreadsheet";
 import { GoogleSpreadsheetFactory } from "../factory/doc";
-import { Row } from "./row";
+import { Score } from "./score";
 
-export async function getRowObjectFromSheet(doc: GoogleSpreadsheet, sheetIndex: number): Promise<Row[]> {
+export async function getScoresObjectFromSheet(doc: GoogleSpreadsheet, sheetIndex: number): Promise<Score[]> {
   // await doc.loadInfo();
   const sheet = doc.sheetsByIndex[sheetIndex];
   const rows = await sheet.getRows();
   const result = rows.map((row) => {
     const obj = row.toObject();
-    return new Row(obj);
+    return new Score(obj);
   })
   return result
 }

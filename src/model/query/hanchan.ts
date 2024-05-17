@@ -1,21 +1,38 @@
-import mongoose, { Model, Schema } from "mongoose";
-import { Score } from "./score";
+import mongoose from "mongoose";
+import { Score } from "../../google/score";
+import { Hanchan, HanchanModel } from "../hanchan";
+import { PlayerModel } from "../player";
 
-type mode = "3player" | "4player";
-
-export interface Hanchan {
-  date: Date;
-  mode: mode;
-  scores: Score[];
+export async function insertHanchans(scores: Score[]): Promise<void> {
+  try {
+    const existingHanchan = await HanchanModel.find({}, { date: 1 });
+    const existingDates: Date[] = existingHanchan.map((doc: Hanchan) => doc.date)
+    const insertScores: Score[] = scores.filter((score: Score) => !existingDates.includes(score.Date))
+    await buildParams(insertScores)
+    if (insertScores.length === 0) return;
+  } catch (error) {
+    throw error
+  }
 }
 
-const hanchanSchema = new Schema<Hanchan>({
-  date: { type: Date, required: true },
-  mode: { type: String, enum: ["3player", "4player"], required: true },
-  scores: [{ playerId: { type: Schema.Types.ObjectId, ref: "Player", required: true }, point: { type: Number, required: true } }],
-});
+async function buildParams(scores: Score[]) {
+  const playerIdMap = await getPlayerIds()
 
-export const HanchanModel: Model<Hanchan> = mongoose.model(
-  "Hanchan",
-  hanchanSchema
-);
+  console.log(playerIdMap);
+  console.log(scores);
+  
+  
+}
+
+async function getPlayerIds(): Promise<Map<string, mongoose.Types.ObjectId>> {
+  const playerIdMap = new Map<string, mongoose.Types.ObjectId>();
+  try {
+    const players = await PlayerModel.find({});
+    players.forEach(player => {
+      playerIdMap.set(player.name, player._id);
+    });
+    return playerIdMap;
+  } catch (error) {
+    throw error;
+  }
+}
