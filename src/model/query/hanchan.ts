@@ -1,15 +1,18 @@
 import mongoose from "mongoose";
-import { Score } from "../../google/score";
+import { Score, Users } from "../../google/score";
 import { Hanchan, HanchanModel } from "../hanchan";
 import { PlayerModel } from "../player";
+import { buildScoreParams } from "./score";
 
-export async function insertHanchans(scores: Score[]): Promise<void> {
+export async function insertHanchans(scores: Score[]): Promise<Hanchan[]> {
   try {
     const existingHanchan = await HanchanModel.find({}, { date: 1 });
     const existingDates: Date[] = existingHanchan.map((doc: Hanchan) => doc.date)
     const insertScores: Score[] = scores.filter((score: Score) => !existingDates.includes(score.Date))
-    await buildParams(insertScores)
-    if (insertScores.length === 0) return;
+    if (insertScores.length === 0) return [];
+    const params = await buildParams(insertScores)
+    const result: Hanchan[] = await HanchanModel.insertMany(params);
+    return result
   } catch (error) {
     throw error
   }
@@ -17,11 +20,16 @@ export async function insertHanchans(scores: Score[]): Promise<void> {
 
 async function buildParams(scores: Score[]) {
   const playerIdMap = await getPlayerIds()
-
-  console.log(playerIdMap);
-  console.log(scores);
-  
-  
+  const mode = Object.keys(scores[0].Users).length === 3 ? "3player" : "4player"
+  const insertManyParams: Hanchan[] = scores.map((score: Score) => {
+    const hanchan: Hanchan = {
+      date: score.Date,
+      mode: mode,
+      scores: buildScoreParams(score.Users, playerIdMap)
+    }
+    return hanchan
+  })
+  return insertManyParams
 }
 
 async function getPlayerIds(): Promise<Map<string, mongoose.Types.ObjectId>> {
