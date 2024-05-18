@@ -1,10 +1,11 @@
+import { PlayedDate } from "../domain/value/date";
 import parseStringToDate from "../utils/parseDate";
 
 export type Users = Record<string, string>
 
 export class Score {
   public readonly ID: string;
-  public readonly Date: Date;
+  public readonly Date: PlayedDate;
   public readonly Users: Users;
 
   constructor(obj: Partial<Record<string, any>>) {
@@ -13,8 +14,8 @@ export class Score {
     this.Users = this.extractPlayers(obj)
   }
 
-  private setDate(date: string, timestamp: string): Date {
-    return parseStringToDate(date, timestamp);
+  private setDate(date: string, timestamp: string): PlayedDate {
+    return new PlayedDate(parseStringToDate(date, timestamp));
   }
 
   private extractPlayers(obj: any): Record<string, string> {

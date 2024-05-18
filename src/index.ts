@@ -16,11 +16,13 @@ const uri = process.env.MONGO_URI as string;
   const factory = new GoogleSpreadsheetFactory
   const doc = await factory.createGoogleSheetDoc()
   const score3plyers = await getScoresObjectFromSheet(doc, constants.PLAYERS_3_SHEETID);
+  // const score4plyers = await getScoresObjectFromSheet(doc, constants.PLAYERS_3_SHEETID);
   const playersName = await getPlayersNameFromSheet(doc, constants.PLAYERS_NAME_SHEETID)
   try {
     await mongoose.connect(uri);
-    // await insertPlayers(playersName)
+    await insertPlayers(playersName)
     await insertHanchans(score3plyers)
+    // await insertHanchans(score4plyers)
     
   } catch(error) {
     console.error(error);
