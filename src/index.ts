@@ -1,10 +1,6 @@
 import env from "dotenv";
 env.config();
 import mongoose from "mongoose";
-import { Player, PlayerModel } from "./model/player";
-import { Hanchan, HanchanModel } from "./model/hanchan";
-import parseDateString from "./utils/parseDate";
-import { Score } from "./model/score";
 import { GoogleSpreadsheetFactory } from "./factory/doc";
 import * as constants from "./google/constants"
 import { getPlayersNameFromSheet, getScoresObjectFromSheet,  } from "./google/sheet";
@@ -16,12 +12,14 @@ const uri = process.env.MONGO_URI as string;
   const factory = new GoogleSpreadsheetFactory
   const doc = await factory.createGoogleSheetDoc()
   const score3plyers = await getScoresObjectFromSheet(doc, constants.PLAYERS_3_SHEETID);
+  const score4plyers = await getScoresObjectFromSheet(doc, constants.PLAYERS_4_SHEETID);
   const playersName = await getPlayersNameFromSheet(doc, constants.PLAYERS_NAME_SHEETID)
   try {
     await mongoose.connect(uri);
-    // await insertPlayers(playersName)
+    await insertPlayers(playersName)
     await insertHanchans(score3plyers)
-    
+    await insertHanchans(score4plyers)
+    console.log("Successfuly inserted!");
   } catch(error) {
     console.error(error);
   } finally {

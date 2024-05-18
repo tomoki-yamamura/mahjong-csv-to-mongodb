@@ -7,8 +7,8 @@ import { buildScoreParams } from "./score";
 export async function insertHanchans(scores: Score[]): Promise<Hanchan[]> {
   try {
     const existingHanchan = await HanchanModel.find({}, { date: 1 });
-    const existingDates: Date[] = existingHanchan.map((doc: Hanchan) => doc.date)
-    const insertScores: Score[] = scores.filter((score: Score) => !existingDates.includes(score.Date))
+    const existingDates: string[] = existingHanchan.map((doc: Hanchan) => doc.date.toISOString())
+    const insertScores: Score[] = scores.filter((score: Score) => !existingDates.includes(score.Date.toISOString()))
     if (insertScores.length === 0) return [];
     const params = await buildParams(insertScores)
     const result: Hanchan[] = await HanchanModel.insertMany(params);
