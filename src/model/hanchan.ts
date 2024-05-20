@@ -1,7 +1,7 @@
-import mongoose, { Model, Schema } from "mongoose";
+import mongoose, { Model, Schema, Types } from "mongoose";
 import { Score } from "./score";
 
-type mode = "3player" | "4player";
+type mode = "3players" | "4players";
 
 export interface Hanchan {
   date: Date;
@@ -16,7 +16,7 @@ const hanchanSchema = new Schema<Hanchan>({
   },
   mode: {
     type: String,
-    enum: ["3player", "4player"],
+    enum: ["3players", "4players"],
     required: true,
   },
   scores: [

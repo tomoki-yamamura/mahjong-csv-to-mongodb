@@ -20,7 +20,7 @@ export async function insertHanchans(scores: Score[]): Promise<Hanchan[]> {
 
 async function buildParams(scores: Score[]) {
   const playerIdMap = await getPlayerIds()
-  const mode = Object.keys(scores[0].Users).length === 3 ? "3player" : "4player"
+  const mode = Object.keys(scores[0].Users).length === 3 ? "3players" : "4players"
   const insertManyParams: Hanchan[] = scores.map((score: Score) => {
     const hanchan: Hanchan = {
       date: score.Date,
