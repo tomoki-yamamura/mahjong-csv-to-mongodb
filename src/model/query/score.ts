@@ -21,14 +21,19 @@ export function buildScoreParams(scores: ScoreSheet[], playerIdMap: Map<string, 
 }
 
 export async function insertScores(scores: ScoreSheet[], map: PlayerIdMap, mode: mode) {
-  const latestScore = await ScoreModel.findOne({ mode: mode }).sort({ date: -1 }).exec();
-  if (latestScore === null) {
-    const params = buildScoreParams(scores, map, mode)
-    await ScoreModel.insertMany(params);
-  } else {
-    const lastDate = latestScore.date
-    const filteredScore = scores.filter((score: ScoreSheet) => score.Date > lastDate)
-    const params = buildScoreParams(filteredScore, map, mode)
-    await ScoreModel.insertMany(params);
+  try {
+    const latestScore = await ScoreModel.findOne({ mode }).sort({ date: -1 }).exec();
+    
+    const scoresToInsert = latestScore
+      ? scores.filter((score: ScoreSheet) => score.Date > latestScore.date)
+      : scores;
+
+    if (scoresToInsert.length > 0) {
+      const params = buildScoreParams(scoresToInsert, map, mode);
+      await ScoreModel.insertMany(params);
+    }
+  } catch (error) {
+    console.error('Error inserting scores:', error);
+    throw new Error('Failed to insert scores');
   }
 }
