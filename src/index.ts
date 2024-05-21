@@ -4,8 +4,8 @@ import mongoose from "mongoose";
 import { GoogleSpreadsheetFactory } from "./factory/doc";
 import * as constants from "./google/constants"
 import { getPlayersNameFromSheet, getScoresObjectFromSheet,  } from "./google/sheet";
-import { insertPlayers } from "./model/query/player";
-import { insertHanchans } from "./model/query/hanchan";
+import { getPlayerIds, insertPlayers } from "./model/query/player";
+import { insertScores } from "./model/query/score";
 const uri = process.env.MONGO_URI as string;
 
 (async () => {
@@ -17,8 +17,9 @@ const uri = process.env.MONGO_URI as string;
   try {
     await mongoose.connect(uri);
     await insertPlayers(playersName)
-    await insertHanchans(score3plyers)
-    await insertHanchans(score4plyers)
+    const playerIds = await getPlayerIds();
+    await insertScores(score3plyers, playerIds, "3players")
+    await insertScores(score4plyers, playerIds, "4players")
     console.log("Successfuly inserted!");
   } catch(error) {
     console.error(error);

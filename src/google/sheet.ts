@@ -1,9 +1,7 @@
 import { GoogleSpreadsheet } from "google-spreadsheet";
-import { GoogleSpreadsheetFactory } from "../factory/doc";
-import { Score } from "./score";
+import  Score  from "./score";
 
 export async function getScoresObjectFromSheet(doc: GoogleSpreadsheet, sheetIndex: number): Promise<Score[]> {
-  // await doc.loadInfo();
   const sheet = doc.sheetsByIndex[sheetIndex];
   const rows = await sheet.getRows();
   const result = rows.map((row) => {
