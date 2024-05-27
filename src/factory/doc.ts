@@ -1,8 +1,4 @@
-import {
-  GoogleSpreadsheet,
-  GoogleSpreadsheetRow,
-  GoogleSpreadsheetWorksheet,
-} from "google-spreadsheet";
+import { GoogleSpreadsheet } from "google-spreadsheet";
 import { JWT } from "google-auth-library";
 
 const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
@@ -18,8 +14,8 @@ const serviceAccountAuth = new JWT({
 export class GoogleSpreadsheetFactory {
   constructor() {}
   async createGoogleSheetDoc(): Promise<GoogleSpreadsheet> {
-    const doc = new GoogleSpreadsheet(sheetId, serviceAccountAuth)
-    await doc.loadInfo()
-    return doc
+    const doc = new GoogleSpreadsheet(sheetId, serviceAccountAuth);
+    await doc.loadInfo();
+    return doc;
   }
 }
