@@ -6,9 +6,10 @@ import * as constants from "./google/constants"
 import { getPlayersNameFromSheet, getScoresObjectFromSheet,  } from "./google/sheet";
 import { getPlayerIds, insertPlayers } from "./model/query/player";
 import { insertScores } from "./model/query/score";
+import { Handler } from "aws-lambda";
 const uri = process.env.MONGO_URI as string;
 
-(async () => {
+export const handler: Handler = async (): Promise<void> => {
   const factory = new GoogleSpreadsheetFactory
   const doc = await factory.createGoogleSheetDoc()
   const score3plyers = await getScoresObjectFromSheet(doc, constants.PLAYERS_3_SHEETID);
@@ -27,4 +28,4 @@ const uri = process.env.MONGO_URI as string;
     await mongoose.connection.close();
     console.log("db connection closed");
   }
-})()
+}
