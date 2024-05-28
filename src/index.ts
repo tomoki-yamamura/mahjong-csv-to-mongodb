@@ -4,11 +4,14 @@ import mongoose from "mongoose";
 import { GoogleSpreadsheetFactory } from "./factory/doc";
 import * as constants from "./google/constants"
 import { getPlayersNameFromSheet, getScoresObjectFromSheet,  } from "./google/sheet";
-import { insertPlayers } from "./model/query/player";
-import { insertHanchans } from "./model/query/hanchan";
+import { getPlayerIds, insertPlayers } from "./model/query/player";
+import { insertScores } from "./model/query/score";
+import { SQSEvent, SQSHandler } from "aws-lambda";
 const uri = process.env.MONGO_URI as string;
 
-(async () => {
+export const handler: SQSHandler = async (event: SQSEvent): Promise<void> => {
+  console.log("Received SQS Event:", JSON.stringify(event));
+  
   const factory = new GoogleSpreadsheetFactory
   const doc = await factory.createGoogleSheetDoc()
   const score3plyers = await getScoresObjectFromSheet(doc, constants.PLAYERS_3_SHEETID);
@@ -17,8 +20,9 @@ const uri = process.env.MONGO_URI as string;
   try {
     await mongoose.connect(uri);
     await insertPlayers(playersName)
-    await insertHanchans(score3plyers)
-    await insertHanchans(score4plyers)
+    const playerIds = await getPlayerIds();
+    await insertScores(score3plyers, playerIds, "3players")
+    await insertScores(score4plyers, playerIds, "4players")
     console.log("Successfuly inserted!");
   } catch(error) {
     console.error(error);
@@ -26,4 +30,4 @@ const uri = process.env.MONGO_URI as string;
     await mongoose.connection.close();
     console.log("db connection closed");
   }
-})()
+}

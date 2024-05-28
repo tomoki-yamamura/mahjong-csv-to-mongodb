@@ -1,5 +1,5 @@
 import mongoose, { Model, Schema, Types } from "mongoose";
-export interface Player {
+export interface Player extends Document {
   name: string;
 }
 
