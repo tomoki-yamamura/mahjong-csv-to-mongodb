@@ -6,10 +6,12 @@ import * as constants from "./google/constants"
 import { getPlayersNameFromSheet, getScoresObjectFromSheet,  } from "./google/sheet";
 import { getPlayerIds, insertPlayers } from "./model/query/player";
 import { insertScores } from "./model/query/score";
-import { Handler } from "aws-lambda";
+import { SQSEvent, SQSHandler } from "aws-lambda";
 const uri = process.env.MONGO_URI as string;
 
-export const handler: Handler = async (): Promise<void> => {
+export const handler: SQSHandler = async (event: SQSEvent): Promise<void> => {
+  console.log("Received SQS Event:", JSON.stringify(event));
+  
   const factory = new GoogleSpreadsheetFactory
   const doc = await factory.createGoogleSheetDoc()
   const score3plyers = await getScoresObjectFromSheet(doc, constants.PLAYERS_3_SHEETID);
