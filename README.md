@@ -18,12 +18,25 @@ This repository contains a system for converting the score which is retrived fro
 MONGO_URI=mongodb+srv://email:password@cluster0.pozonqm.mongodb.net/mahjong?retryWrites=true&w=majority&appName=Cluster0
 ```
 
-## Installation
+4. You create and set environment value in env.json
 
-To install, follow these steps:
+```json
+{
+  "MahjongCsvToMongoDBFunction": {
+    "GOOGLE_SERVICE_ACCOUNT_EMAIL": "",
+    "GOOGLE_PRIVATE_KEY": "",
+    "GOOGLE_SHEET_ID": "",
+    "MONGO_URI": ""
+  }
+}
 
-2. npm i (node >= 18)
-3. npm run start
+```
+
+
+## How to run
+
+1. npm run sam:build
+2. npm run sam:invoke
 
 ## Test
 
@@ -32,4 +45,4 @@ To run test:
 1. npm run test
 
 ## Infrastructure
-![](./doc/mahjong.drawio.png)
+![](./doc/mahjong.png)
