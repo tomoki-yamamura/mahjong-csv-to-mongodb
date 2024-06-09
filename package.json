@@ -7,7 +7,7 @@
     "test": "jest",
     "build": "npx tsc",
     "sam:build": "sam build",
-    "sam:local": "sam local invoke MahjongScoreLambdaFunction --event event.json"
+    "sam:invoke": "sam local invoke --env-vars env.json --event event.json"
   },
   "repository": {
     "type": "git",

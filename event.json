@@ -3,7 +3,7 @@
     {
       "messageId": "1",
       "receiptHandle": "MessageReceiptHandle",
-      "body": "{\"key\":\"value\"}",
+      "body": "ID: queueID - 2024-01-01 result was inserted",
       "attributes": {
         "ApproximateReceiveCount": "1",
         "SentTimestamp": "1638231238321",
@@ -13,7 +13,7 @@
       "messageAttributes": {},
       "md5OfBody": "7b270e59b47ff90a553787216d55d91d",
       "eventSource": "aws:sqs",
-      "eventSourceARN": "arn:aws:sqs:ap-northeast-1:123456789012:MyQueue",
+      "eventSourceARN": "arn:aws:sqs:ap-northeast-1:123456789012:mahjongScoreQueue",
       "awsRegion": "ap-northeast-1"
     }
   ]

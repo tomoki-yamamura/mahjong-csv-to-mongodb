@@ -1,51 +1,36 @@
-AWSTemplateFormatVersion: '2010-09-09'
-Transform: 'AWS::Serverless-2016-10-31'
-Parameters:
-  MongoDBUri:
-    Type: String
-    Description: "MongoDB URI"
-  GoogleServiceAccountEmail:
-    Type: String
-    Description: "Google Service Account Email"
-  GooglePrivateKey:
-    Type: String
-    Description: "Google Private Key"
-  GoogleSheetId:
-    Type: String
-    Description: "Google Sheet ID"
-
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: "AWS::Serverless-2016-10-31"
 Resources:
-  MahjongScoreLambdaFunction:
-    Type: 'AWS::Serverless::Function'
+  MahjongCsvToMongoDBFunction:
+    Type: "AWS::Serverless::Function"
     Properties:
       Handler: build/index.handler
       Runtime: nodejs18.x
       CodeUri: .
-      MemorySize: 128
-      Timeout: 60
+      MemorySize: 1024
+      Timeout: 120
       Environment:
         Variables:
-          NODE_ENV: production
-          MONGO_URI: !Ref MongoDBUri
-          GOOGLE_SERVICE_ACCOUNT_EMAIL: !Ref GoogleServiceAccountEmail
-          GOOGLE_PRIVATE_KEY: !Ref GooglePrivateKey
-          GOOGLE_SHEET_ID: !Ref GoogleSheetId
-      Events:
-        SQSTrigger:
-          Type: SQS
-          Properties:
-            Queue: !GetAtt MahjongQueue.Arn
+          GOOGLE_SERVICE_ACCOUNT_EMAIL: GOOGLE_SERVICE_ACCOUNT_EMAIL
+          GOOGLE_PRIVATE_KEY: GOOGLE_PRIVATE_KEY
+          GOOGLE_SHEET_ID: GOOGLE_SHEET_ID
+          MONGO_URI: MONGO_URI
+          TZ: 'Asia/Tokyo'
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: true
+        EntryPoints: ["src/index.ts"]
+    Events:
+      SQSTrigger:
+        Type: SQS
+        Properties:
+          Queue: !GetAtt MahjongScoreQueue.Arn
 
-  MahjongQueue:
+  MahjongScoreQueue:
     Type: 'AWS::SQS::Queue'
     Properties:
-      QueueName: "MahjongQueue"
-      VisibilityTimeout: 90
-
-Outputs:
-  LambdaFunction:
-    Description: "Mahjong Score Lambda Function ARN"
-    Value: !GetAtt MahjongScoreLambdaFunction.Arn
-  QueueURL:
-    Description: "URL of the SQS Queue"
-    Value: !Ref MahjongQueue
+      QueueName: "MahjongScoreQueue"
+      VisibilityTimeout: 30

@@ -1,5 +1,6 @@
 node_modules
 build
-mahjong-auth.json
 .env
 .aws-sam
+.env*
+env.json
