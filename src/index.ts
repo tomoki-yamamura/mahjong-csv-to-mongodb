@@ -1,33 +1,45 @@
-import env from "dotenv";
-env.config();
-import mongoose from "mongoose";
-import { GoogleSpreadsheetFactory } from "./factory/doc";
-import * as constants from "./google/constants"
-import { getPlayersNameFromSheet, getScoresObjectFromSheet,  } from "./google/sheet";
-import { getPlayerIds, insertPlayers } from "./model/query/player";
-import { insertScores } from "./model/query/score";
-import { SQSEvent, SQSHandler } from "aws-lambda";
-const uri = process.env.MONGO_URI as string;
+import env from 'dotenv'
+env.config()
+import mongoose from 'mongoose'
+import { GoogleSpreadsheetFactory } from './factory/doc'
+import * as constants from './google/constants'
+import {
+  getPlayersNameFromSheet,
+  getScoresObjectFromSheet,
+} from './google/sheet'
+import { getPlayerIds, insertPlayers } from './model/query/player'
+import { insertScores } from './model/query/score'
+import { SQSEvent, SQSHandler } from 'aws-lambda'
+const uri = process.env.MONGO_URI as string
 
 export const handler: SQSHandler = async (event: SQSEvent): Promise<void> => {
-  console.log("Received SQS Event:", JSON.stringify(event));
-  
-  const factory = new GoogleSpreadsheetFactory
+  console.log('Received SQS Event:', JSON.stringify(event))
+
+  const factory = new GoogleSpreadsheetFactory()
   const doc = await factory.createGoogleSheetDoc()
-  const score3plyers = await getScoresObjectFromSheet(doc, constants.PLAYERS_3_SHEETID);
-  const score4plyers = await getScoresObjectFromSheet(doc, constants.PLAYERS_4_SHEETID);
-  const playersName = await getPlayersNameFromSheet(doc, constants.PLAYERS_NAME_SHEETID)
+  const score3plyers = await getScoresObjectFromSheet(
+    doc,
+    constants.PLAYERS_3_SHEETID,
+  )
+  const score4plyers = await getScoresObjectFromSheet(
+    doc,
+    constants.PLAYERS_4_SHEETID,
+  )
+  const playersName = await getPlayersNameFromSheet(
+    doc,
+    constants.PLAYERS_NAME_SHEETID,
+  )
   try {
-    await mongoose.connect(uri);
+    await mongoose.connect(uri)
     await insertPlayers(playersName)
-    const playerIds = await getPlayerIds();
-    await insertScores(score3plyers, playerIds, "3players")
-    await insertScores(score4plyers, playerIds, "4players")
-    console.log("Successfuly inserted!");
-  } catch(error) {
-    console.error(error);
+    const playerIds = await getPlayerIds()
+    await insertScores(score3plyers, playerIds, '3players')
+    await insertScores(score4plyers, playerIds, '4players')
+    console.log('Successfuly inserted!')
+  } catch (error) {
+    console.error(error)
   } finally {
-    await mongoose.connection.close();
-    console.log("db connection closed");
+    await mongoose.connection.close()
+    console.log('db connection closed')
   }
 }
