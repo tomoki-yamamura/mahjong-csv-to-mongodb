@@ -5,6 +5,8 @@
   "scripts": {
     "start": "npx ts-node ./src/index.ts",
     "test": "jest",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
     "build": "npx tsc",
     "sam:build": "sam build",
     "sam:invoke": "sam local invoke --env-vars env.json --event event.json"
@@ -22,13 +24,17 @@
   "homepage": "https://github.com/tomoki-yamamura/mahjong-csv-to-mongodb#readme",
   "description": "",
   "devDependencies": {
+    "@eslint/js": "^9.4.0",
     "@types/aws-lambda": "^8.10.138",
     "@types/jest": "^29.5.12",
+    "eslint": "^9.4.0",
+    "globals": "^15.4.0",
     "jest": "^29.7.0",
     "nodemon": "^3.1.0",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.13.0"
   },
   "dependencies": {
     "dotenv": "^16.4.5",

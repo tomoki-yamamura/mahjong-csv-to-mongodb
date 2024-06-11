@@ -1,4 +1,4 @@
-import mongoose, { Model, Schema, Types } from "mongoose";
+import mongoose, { Model, Schema } from "mongoose";
 import { Player } from "./player";
 
 export type mode = "3players" | "4players"

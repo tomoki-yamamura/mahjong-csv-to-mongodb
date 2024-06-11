@@ -1,5 +1,4 @@
 import parseStringToDate from './parseDate';
-import moment from 'moment';
 
   describe("parseDateString", () => {
     it("should have result correct formated", () => {

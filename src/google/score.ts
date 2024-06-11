@@ -1,6 +1,7 @@
 import parseStringToDate from "../utils/parseDate";
 import { Users } from "./user";
-
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 class Score {
   public readonly ID: string;
   public readonly Date: Date;

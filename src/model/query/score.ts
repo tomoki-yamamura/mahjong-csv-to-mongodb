@@ -1,19 +1,19 @@
-import mongoose, { Schema, Types } from "mongoose";
+import { Schema } from "mongoose";
 import ScoreSheet from "../../google/score";
 import { PlayerIdMap } from "./player";
 import { Score, ScoreModel, mode } from "../score";
 
 export function buildScoreParams(scores: ScoreSheet[], playerIdMap: Map<string, Schema.Types.ObjectId>, mode: mode): Score[] {
   const scoreParams = scores.map((score: ScoreSheet) => {
-    const { ID, Date, Users } = score
+    const { Date, Users } = score
     const result = Object.entries(Users).map(([key, value]) => {
-      const score: Score = {
+      const scoreDomain: Score = {
         playerId: playerIdMap.get(key)!,
         point: Number(value),
         mode: mode,
         date: Date
       }
-      return score
+      return scoreDomain
     })
     return result
   })
